@@ -5,7 +5,7 @@ import "NeatoLib"
 meta["source"] = "https://raw.githubusercontent.com/Metalloriff/ElementalReignMods/main/NSFW/SchlongsOfElementalReign/SOER.lua"
 meta["version"] = "0.0.1"
 meta["description"] = "Adds detailed nudity to all pants-less Vulpes. Press P to toggle pants and underwear on self, hold Page Up and Page Down to control erection. Kill me."
-meta["required"] = ["pp"]
+-- meta["required"] = ["pp"]
 
 PP = {}
 
