@@ -3,9 +3,9 @@ import "Assembly-CSharp"
 import "NeatoLib"
 
 meta["source"] = "https://raw.githubusercontent.com/Metalloriff/ElementalReignMods/main/NSFW/SchlongsOfElementalReign/SOER.lua"
-meta["version"] = "0.0.1"
+meta["version"] = "0.0.2"
 meta["description"] = "Adds detailed nudity to all pants-less Vulpes. Press P to toggle pants and underwear on self, hold Page Up and Page Down to control erection. Kill me."
--- meta["required"] = ["pp"]
+meta["required"] = "pp"
 
 PP = {}
 
@@ -41,11 +41,7 @@ function Load()
 
 	npcType = API:FindType("Assembly-CSharp", "NPC")
 
-	if cm == nil then
-		Lib.Prompts.BoolInput("SOER requires pp", "You must install pp.", null, null, "Close")
-	else
-		PP.mesh = cm:FindByName("pp.fbx").asset.transform:Find("Body.001"):GetComponent("SkinnedMeshRenderer")
-	end
+	PP.mesh = cm:FindByName("pp.fbx").asset.transform:Find("Body.001"):GetComponent("SkinnedMeshRenderer")
 
 	if Lib.Player.self ~= nil and not Lib.Player.self:Equals(nil) then
 		PlayerSpawned(Lib.Player.self:GetComponent("PlayerB"))
