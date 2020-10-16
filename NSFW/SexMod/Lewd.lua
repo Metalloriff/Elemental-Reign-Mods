@@ -3,9 +3,9 @@ import "Assembly-CSharp"
 import "System"
 
 meta["source"] = "https://raw.githubusercontent.com/Metalloriff/ElementalReignMods/main/NSFW/SexMod/Lewd.lua"
-meta["version"] = "0.0.1"
+meta["version"] = "0.0.2"
 meta["description"] = "A sex mod for a low poly game? Why? Because furries."
--- meta["required"] = ["lewd", "pp"]
+meta["required"] = "lewd, pp"
 
 function Load()
 	animator = {}
