@@ -10,7 +10,7 @@ import "NLua"
 import ("PhotonUnityNetworking", "Photon.Pun")
 
 meta["source"] = "https://raw.githubusercontent.com/Metalloriff/ElementalReignMods/main/DebugTrainer/Scripts/Debug.lua"
-meta["version"] = "0.0.1"
+meta["version"] = "0.0.2"
 
 function Load()
 	a = ""
@@ -28,7 +28,11 @@ function Unload()
 end
 
 function _()
-	if Input.GetKeyDown(KeyCode.F12) then
+	-- if GameObject.Find("Spawn Target") ~= nil then
+	-- 	Lib.Notifications.Hint(tostring(GameObject.Find("Spawn Target").transform.position))
+	-- end
+
+	if Input.GetKeyDown(KeyCode.Backslash) then
 		local ui = GameObject.Find("Environment").transform:Find("UI").gameObject
 
 		ui:SetActive(not ui.activeSelf)
@@ -204,10 +208,10 @@ function RenderGUI()
 			end
 		end
 	elseif a == "encounters" then
-		local encounters = Resources.LoadAll("RandomEncounters/" .. SceneManager.GetActiveScene().name)
+		local encounters = Resources.LoadAll("RandomEncounters")
 		for i = 0, encounters.Length - 1 do
 			if GUILayout.Button(encounters[i].name) then
-				local e = Resources.Load("RandomEncounters/" .. SceneManager.GetActiveScene().name .. "/" .. encounters[i].name):GetComponent("Encounter")
+				local e = Resources.Load("RandomEncounters/" .. encounters[i].name):GetComponent("Encounter")
 				RandomEncounters.instance:SummonEncounter(e)
 			end
 		end
