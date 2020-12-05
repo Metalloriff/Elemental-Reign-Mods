@@ -10,7 +10,7 @@ import "NLua"
 import ("PhotonUnityNetworking", "Photon.Pun")
 
 meta["source"] = "https://raw.githubusercontent.com/Metalloriff/ElementalReignMods/main/DebugTrainer/Scripts/Debug.lua"
-meta["version"] = "0.0.2"
+meta["version"] = "0.0.3"
 
 function Load()
 	a = ""
@@ -31,13 +31,6 @@ function _()
 	-- if GameObject.Find("Spawn Target") ~= nil then
 	-- 	Lib.Notifications.Hint(tostring(GameObject.Find("Spawn Target").transform.position))
 	-- end
-
-	if Input.GetKeyDown(KeyCode.Backslash) then
-		local ui = GameObject.Find("Environment").transform:Find("UI").gameObject
-
-		ui:SetActive(not ui.activeSelf)
-		uiEnabled = ui.activeSelf
-	end
 end
 
 function ___()
@@ -45,8 +38,6 @@ function ___()
 end
 
 function RenderGUI()
-	if not uiEnabled then return end
-
 	if a ~= "" then
 		if GUILayout.Button("Back") then a = "" end
 	end
