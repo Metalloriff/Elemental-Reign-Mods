@@ -10,7 +10,7 @@ import "NLua"
 import ("PhotonUnityNetworking", "Photon.Pun")
 
 meta["source"] = "https://raw.githubusercontent.com/Metalloriff/ElementalReignMods/main/DebugTrainer/Scripts/Debug.lua"
-meta["version"] = "0.0.3"
+meta["version"] = "0.0.4"
 
 function Load()
 	a = ""
@@ -21,6 +21,8 @@ function Load()
 	luacmd = "enter lua here..."
 	inspectorSearch = ""
 	freecam = false
+	fps = 0
+	lastChangedFps = -5.0
 end
 
 function Unload()
@@ -31,6 +33,11 @@ function _()
 	-- if GameObject.Find("Spawn Target") ~= nil then
 	-- 	Lib.Notifications.Hint(tostring(GameObject.Find("Spawn Target").transform.position))
 	-- end
+	
+	if (Time.time - lastChangedFps > 1) then
+	    fps = Math.Round(1 / Time.unscaledDeltaTime)
+	    lastChangedFps = Time.time
+    end
 end
 
 function ___()
@@ -207,6 +214,8 @@ function RenderGUI()
 			end
 		end
 	end
+	
+	GUILayout.Label(tostring(fps) .. " FPS")
 end
 
 function SetInspecting(la)
