@@ -1,16 +1,19 @@
 import "UnityEngine"
 import "UnityEngine.SceneManagement"
 import "Assembly-CSharp"
-import "NeatoLib"
+import "Managers"
 import "System"
 import "System.IO"
 import "System.Reflection"
 import "NLua"
+import "Player"
+import "UI"
+import "Environment"
 
 import ("PhotonUnityNetworking", "Photon.Pun")
 
 meta["source"] = "https://raw.githubusercontent.com/Metalloriff/ElementalReignMods/main/DebugTrainer/Scripts/Debug.lua"
-meta["version"] = "0.0.4"
+meta["version"] = "0.0.5"
 
 function Load()
 	a = ""
