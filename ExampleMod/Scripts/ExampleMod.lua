@@ -1,6 +1,7 @@
 import "UnityEngine" -- Imports the UnityEngine assembly. This will almost always be used.
 import "Assembly-CSharp" -- Imports the game's main assembly. This will almost always be used.
-import "NeatoLib" -- Imports the game's extended library. This contains useful functions and extensions to objects.
+import "Managers" -- Imports the game's extended libraries. This contains useful functions and extensions to objects.
+import "UI" -- Imports the game's UI libraries. 
 
 import ("PhotonUnityNetworking", "Photon.Pun") -- Imports the networking system used in ER. This will be necessary for any multiplayer mods.
 
@@ -8,7 +9,7 @@ import ("PhotonUnityNetworking", "Photon.Pun") -- Imports the networking system 
 meta["source"] = "https://raw.githubusercontent.com/Metalloriff/ElementalReignMods/main/ExampleMod/Scripts/ExampleMod.lua"
 	-- The source meta is used to request the updated version of the script, this is required for auto-updates to work.
 	-- NOTE: The source meta, if present, must be paired with the version meta.
-meta["version"] = "0.0.2"
+meta["version"] = "0.0.3"
 	-- The version meta is used for update version comparisons.
 	-- If the remote source version is higher than the local version, an update request prompt will be shown.
 	-- NOTE: The version must follow the semantic versioning format (https://semver.org/) of MAJOR.MINOR.PATCH.
@@ -37,7 +38,7 @@ function Load() -- Called as soon as the script starts. Use this for initializat
 	someStringSetting = "test"
 
 	-- Load the settings fields from the settings.json file for this mod.
-	API:LoadSettings(Name, "someIntSetting", "someStringSetting")
+	-- API:LoadSettings(Name, "someIntSetting", "someStringSetting")
 end
 
 -- Call this function to see how applying and saving settings works.
