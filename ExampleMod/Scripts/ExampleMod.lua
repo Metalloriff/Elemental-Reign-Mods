@@ -9,7 +9,7 @@ import ("PhotonUnityNetworking", "Photon.Pun") -- Imports the networking system 
 meta["source"] = "https://raw.githubusercontent.com/Metalloriff/ElementalReignMods/main/ExampleMod/Scripts/ExampleMod.lua"
 	-- The source meta is used to request the updated version of the script, this is required for auto-updates to work.
 	-- NOTE: The source meta, if present, must be paired with the version meta.
-meta["version"] = "0.0.3"
+meta["version"] = "0.0.4"
 	-- The version meta is used for update version comparisons.
 	-- If the remote source version is higher than the local version, an update request prompt will be shown.
 	-- NOTE: The version must follow the semantic versioning format (https://semver.org/) of MAJOR.MINOR.PATCH.
@@ -63,7 +63,6 @@ function ___() end -- Called at the end of every frame. This is useful for overr
 function RenderGUI() end -- Called every frame when the GUI is ready to be rendered.
 
 function PlayerSpawned(player) end -- Called when a player spawns into the game. This includes, but is not limited to yourself. -- player: PlayerB
-function ReceivedDamage(player, dmg, type) end -- Called when you receive damage. -- player: PlayerB, dmg: float, type: DamageType
 function MapChanged(scene) end -- Called when changing scenes (maps). This includes going to and from the main menu. -- scene: UnityEngine.SceneManagement.Scene
 function PostModManagerInit() end -- Called after all mods and scripts are loaded and ready. Use this for extending onto other mods seamlessly.
 									-- To extend onto PostManagerInit(), all script mods (.lua) are loaded after every other type of mod,
