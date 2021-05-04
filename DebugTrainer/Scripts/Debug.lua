@@ -9,11 +9,12 @@ import "NLua"
 import "Player"
 import "UI"
 import "Environment"
+import "Spawners"
 
 import ("PhotonUnityNetworking", "Photon.Pun")
 
 meta["source"] = "https://raw.githubusercontent.com/Metalloriff/ElementalReignMods/main/DebugTrainer/Scripts/Debug.lua"
-meta["version"] = "0.0.5"
+meta["version"] = "0.0.6"
 
 function Load()
 	a = ""
@@ -37,7 +38,7 @@ function _()
 	-- 	Lib.Notifications.Hint(tostring(GameObject.Find("Spawn Target").transform.position))
 	-- end
 	
-	if (Time.time - lastChangedFps > 1) then
+	if (Time.time - lastChangedFps > 0.25) then
 	    fps = Math.Round(1 / Time.unscaledDeltaTime)
 	    lastChangedFps = Time.time
     end
@@ -53,8 +54,8 @@ function RenderGUI()
 	end
 
 	if a == "" then
-		GUILayout.Label("Debug script version 1.0")
-
+		if GUILayout.Button("Debug script v" .. meta["version"]) then a = "main" end
+	elseif a == "main" then
 		if GUILayout.Button("Time") then a = "time" end
 		if GUILayout.Button("Weather") then a = "weather" end
 		if GUILayout.Button("Housing") then a = "housing" end
