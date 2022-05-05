@@ -11,10 +11,10 @@ import "UI"
 import "Environment"
 import "Spawners"
 
-import ("PhotonUnityNetworking", "Photon.Pun")
+import("PhotonUnityNetworking", "Photon.Pun")
 
 meta["source"] = "https://raw.githubusercontent.com/Metalloriff/ElementalReignMods/main/DebugTrainer/Scripts/Debug.lua"
-meta["version"] = "0.0.6"
+meta["version"] = "0.1.7"
 
 function Load()
 	a = ""
@@ -23,32 +23,43 @@ function Load()
 	weatherIntensity = 1
 	timeLocked = TimeCycle.speedMult == 0
 	luacmd = "enter lua here..."
-	inspectorSearch = ""
 	freecam = false
 	fps = 0
 	lastChangedFps = -5.0
+
+	Debug.Log("DEBUG MOD LOADED")
 end
 
 function Unload()
-	
+
 end
 
 function _()
 	-- if GameObject.Find("Spawn Target") ~= nil then
 	-- 	Lib.Notifications.Hint(tostring(GameObject.Find("Spawn Target").transform.position))
 	-- end
-	
+
 	if (Time.time - lastChangedFps > 0.25) then
-	    fps = Math.Round(1 / Time.unscaledDeltaTime)
-	    lastChangedFps = Time.time
-    end
+		fps = Math.Round(1 / Time.unscaledDeltaTime)
+		lastChangedFps = Time.time
+	end
+
+	if Lib.Input.GetKeyDown(KeyCode.RightBracket) then
+		if Time.timeScale == 1 then
+			Time.timeScale = 0.001
+		else
+			Time.timeSCale = 1
+		end
+	end
 end
 
 function ___()
-	
+
 end
 
 function RenderGUI()
+	if UI.current == "Player/BuildMode" then return end
+
 	if a ~= "" then
 		if GUILayout.Button("Back") then a = "" end
 	end
@@ -61,6 +72,7 @@ function RenderGUI()
 		if GUILayout.Button("Housing") then a = "housing" end
 		if GUILayout.Button("Encounters") then a = "encounters" end
 		if GUILayout.Button("Tools") then a = "tools" end
+		if GUILayout.Button("Pets") then a = "pets" end
 	elseif a == "time" then
 		GUILayout.Label("Time of Day " .. Math.Round(TimeCycle.instance.tod, 2))
 		TimeCycle.instance.tod = GUILayout.HorizontalSlider(TimeCycle.instance.tod, 0, 1)
@@ -86,6 +98,9 @@ function RenderGUI()
 		GUILayout.Label("Snow Amount " .. Math.Round(Weather.instance.snowAmount, 2))
 		Weather.instance.snowAmount = GUILayout.HorizontalSlider(Weather.instance.snowAmount, 0, 0.35)
 
+		GUILayout.Label("Wetness Amount " .. Math.Round(Weather.instance.wetnessAmount, 2))
+		Weather.instance.wetnessAmount = GUILayout.HorizontalSlider(Weather.instance.wetnessAmount, 0, 1)
+
 		Weather.locked = GUILayout.Toggle(Weather.locked, "Weather locked?")
 	elseif a == "tools" then
 		luacmd = GUILayout.TextArea(luacmd)
@@ -99,99 +114,39 @@ function RenderGUI()
 
 			if freecam == true then
 				PlayerMovement.instance.enabled = false
-				PlayerB.instance.enabled = false
+				PlayerCore.instance.enabled = false
 			else
 				PlayerMovement.instance.enabled = true
-				PlayerB.instance.enabled = true
+				PlayerCore.instance.enabled = true
+			end
+		end
+	elseif a == "pets" then
+		local allPets = Resources.LoadAll("Pets")
+
+		for i = 0, allPets.Length - 1 do
+			if GUILayout.Button(allPets[i].name) then
+				local obj = PhotonNetwork.Instantiate("Pets/" .. allPets[i].name, PlayerCore.instance.transform.position, Quaternion.identity)
+				local pet = obj:GetComponent("Pet")
+
+				pet.owner = PlayerCore.instance
 			end
 		end
 
-		if GUILayout.Button("Inspector") then a = "inspector" end
-	elseif a == "inspector" then
-		local la = PlayerB.lookingAt.transform
+		GUILayout.Space(20)
+		GUILayout.Label("Your active pets")
 
-		GUILayout.Label("Search")
-		inspectorSearch = GUILayout.TextArea(inspectorSearch)
-		isi = GameObject.Find(inspectorSearch)
+		local yourPets = PlayerCore.instance.pets
 
-		if string.len(inspectorSearch) > 0 and isi ~= nil then
-			la = isi.transform
-		end
+		for i = 0, yourPets.Count - 1 do
+			GUILayout.BeginHorizontal()
 
-		if la ~= nil then
-			if la ~= lastla then
-				SetInspecting(la)
-				lastla = la
-				scrollpos = Vector2.zero
+			GUILayout.Button(yourPets[i].name)
+
+			if GUILayout.Button("Kill") then
+				Extensions.NetDestroy(yourPets[i].gameObject)
 			end
 
-			scrollpos = GUILayout.BeginScrollView(scrollpos)
-
-			if i_comp ~= nil then
-				GUILayout.Label(tostring(i_comp))
-				Debug.Log(tostring(i_comp))
-
-				local type = i_comp:GetType()
-				local properties = type:GetProperties()
-				local fields = type:GetFields()
-				local methods = type:GetMethods()
-				
-				GUILayout.Label(properties.Length .. " properties")
-
-				for i = 0, properties.Length - 1 do
-					if GUILayout.Button(properties[i].Name) then
-					end
-				end
-
-				GUILayout.Label(fields.Length .. " fields")
-
-				for i = 0, fields.Length - 1 do
-					if GUILayout.Button(fields[i].Name) then
-					end
-				end
-
-				GUILayout.Label(methods.Length .. " methods")
-
-				for i = 0, methods.Length - 1 do
-					local params = methods[i]:GetParameters()
-					local parameters = ""
-
-					if params.Length ~= 0 then
-						for p = 0, params.Length - 1 do
-							parameters = parameters .. tostring(params[p].ParameterType) .. " " .. params[p].Name
-
-							if params[p].DefaultValue ~= nil then
-								parameters = parameters .. " = " .. tostring(params[p].DefaultValue)
-							end
-
-							if p ~= params.Length - 1 then
-								parameters = parameters .. ", "
-							end
-						end
-					end
-
-					if GUILayout.Button(methods[i].Name .. "(" .. parameters .. ")") then
-					end
-				end
-			else
-				GUILayout.Label(inspecting.name .. " (" .. i_components.Length .. " components)")
-	
-				for i = 0, i_components.Length - 1 do
-					if GUILayout.Button(tostring(i_components[i])) then
-						i_comp = i_components[i]
-					end
-				end
-	
-				GUILayout.Label(i_children.Length - 1 .. " children")
-	
-				for i = 1, i_children.Length - 1 do
-					if GUILayout.Button(i_children[i].name) then
-						SetInspecting(i_children[i])
-					end
-				end
-			end
-
-			GUILayout.EndScrollView()
+			GUILayout.EndHorizontal()
 		end
 	elseif a == "housing" then
 		GUILayout.Label("Generate")
@@ -218,15 +173,8 @@ function RenderGUI()
 			end
 		end
 	end
-	
-	GUILayout.Label(tostring(fps) .. " FPS")
-end
 
-function SetInspecting(la)
-	inspecting = la
-	i_components = la:GetComponents(API:FindType("UnityEngine", "Component"))
-	i_children = la:GetComponentsInChildren(API:FindType("UnityEngine", "Transform"))
-	i_comp = nil
+	GUILayout.Label(tostring(fps) .. " FPS")
 end
 
 function __()
@@ -244,10 +192,10 @@ end
 
 function Command(cmd, arg1, arg2)
 	if cmd == "die" then
-		PlayerB.instance.hp = 0
+		PlayerCore.instance.hp = 0
 	end
 
-	if cmd == "emote" then	
+	if cmd == "emote" then
 		PlayerAnimations.PlayAnimation(arg1, arg2)
 	end
 end
